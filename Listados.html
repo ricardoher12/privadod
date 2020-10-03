@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html>
+
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">  
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css" rel="stylesheet">  
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script> 
+	
+	<script>         
+
+$(document).ready(function(){
+
+     $('.input-daterange input').each(function() {
+                        $(this).datepicker({
+                            autoclose : true,
+                            assumeNearbyYear : true,
+                            format : "mm-dd-yyyy",
+                            language : "es",
+                            defaultDate: "10-02-2020"
+                        });
+
+                    });
+    
+
+	$("#boton").click(function() {
+		var today  = new Date();
+    
+    $.ajax({
+           type: "get",
+           url: "https://webapiprivado20201002172629.azurewebsites.net/reportes?initialDate=" +  $("#sltFechaInicio").val()  + "&finalDate=" + $("#sltFechaFin").val() +  "&idSucursal="+ $("#sltSucursalFiltro").val() + "&idComercio=" +$("#sltComercioFiltro").val() + "&idMunicipio=" + $("#sltMunicipioFiltro").val()
+		   + "&idDepartamento=" + $("#sltDepartamentoFiltro").val() + "&idRegion=" + $("#sltRegionFiltro").val(),
+		   contentType:"application/json",
+           //data: "{\"IdSucursal\": " + $('#sltSucursalFiltro').val() + ", \"Descripcion\": \" " + $("#conversionmont").val() + "\" }", // serializes the form's elements.
+           success: function(data)
+           {
+				if(data)
+				{
+
+                $("#tblListados").empty();
+
+                var len = data.length;
+
+                for( var i = 0; i<len; i++){
+                    var nameR = data[i]['nombreRegion'];
+                    var nameD = data[i]['nombreDepartamento'];
+                    var nameM = data[i]['nombreMunicipio'];
+                    var nameC = data[i]['nombreComercio'];
+                    var nameS = data[i]['nombreSucursal'];
+                    var queja = data[i]['queja'];
+                    
+                    $("#tbListados").append("<tr><td> "+queja+"</td><td>"+nameC+"</td><td>"+nameS+"</td><td>"+nameM+"</td><td>"+nameD+"</td><td>"+nameR+"</td></tr>");
+                }
+
+                }
+                else{
+                    alert("No se encontraron datos"); // show response from the php script.
+                }
+				
+               
+           }
+         });
+    
+});
+
+     var deptid = $(this).val();
+
+        $.ajax({
+            url: 'https://webapiprivado20201002172629.azurewebsites.net/sucursales',
+            type: 'patch',
+            //data: {depart:deptid},
+            //dataType: 'json',
+			crossDomain: true,
+            success:function(response){
+
+                var len = response.length;
+
+                $("#sltSucursalFiltro").empty();
+				$("#sltSucursalFiltro").append("<option value='0'>Seleccione una Sucursal</option>");
+				
+                for( var i = 0; i<len; i++){
+                    var id = response[i]['idSucursal'];
+                    var name = response[i]['nombre'];
+                    
+                    $("#sltSucursalFiltro").append("<option value='"+id+"'>"+name+"</option>");
+
+                }
+            }
+        });
+		
+		
+		
+		$.ajax({
+            url: 'https://webapiprivado20201002172629.azurewebsites.net/comercio',
+            type: 'get',
+            //data: {depart:deptid},
+            //dataType: 'json',
+			crossDomain: true,
+            success:function(response){
+
+                var len = response.length;
+
+                $("#sltComercioFiltro").empty();
+				$("#sltComercioFiltro").append("<option value='0'>Seleccione un Comercio</option>");
+				
+                for( var i = 0; i<len; i++){
+                    var id = response[i]['idComercio'];
+                    var name = response[i]['nombre'];
+                    
+                    $("#sltComercioFiltro").append("<option value='"+id+"'>"+name+"</option>");
+
+                }
+            }
+        });
+		
+		
+		$.ajax({
+            url: 'https://webapiprivado20201002172629.azurewebsites.net/region',
+            type: 'get',
+            //data: {depart:deptid},
+            //dataType: 'json',
+			crossDomain: true,
+            success:function(response){
+
+                var len = response.length;
+
+                $("#sltRegionFiltro").empty();
+				$("#sltRegionFiltro").append("<option value='0'>Seleccione una Region</option>");
+				
+                for( var i = 0; i<len; i++){
+                    var id = response[i]['idRegion'];
+                    var name = response[i]['nombre'];
+                    
+                    $("#sltRegionFiltro").append("<option value='"+id+"'>"+name+"</option>");
+
+                }
+            }
+        });
+		
+		$.ajax({
+            url: 'https://webapiprivado20201002172629.azurewebsites.net/departamento',
+            type: 'get',
+            //data: {depart:deptid},
+            //dataType: 'json',
+			crossDomain: true,
+            success:function(response){
+
+                var len = response.length;
+
+                $("#sltDepartamentoFiltro").empty();
+				$("#sltDepartamentoFiltro").append("<option value='0'>Seleccione un Departamento</option>");
+				
+                for( var i = 0; i<len; i++){
+                    var id = response[i]['idDepartamento'];
+                    var name = response[i]['nombre'];
+                    
+                    $("#sltDepartamentoFiltro").append("<option value='"+id+"'>"+name+"</option>");
+
+                }
+            }
+        });
+		
+		
+		
+		$.ajax({
+            url: 'https://webapiprivado20201002172629.azurewebsites.net/municipio',
+            type: 'get',
+            //data: {depart:deptid},
+            //dataType: 'json',
+			crossDomain: true,
+            success:function(response){
+
+                var len = response.length;
+
+                $("#sltMunicipioFiltro").empty();
+				$("#sltMunicipioFiltro").append("<option value='0'>Seleccione un Municipio</option>");
+				
+                for( var i = 0; i<len; i++){
+                    var id = response[i]['idMunicipio'];
+                    var name = response[i]['nombre'];
+                    
+                    $("#sltMunicipioFiltro").append("<option value='"+id+"'>"+name+"</option>");
+
+                }
+            }
+        });
+});	
+</script>
+	
+	</head>
+
+    <title>Reporte</title>
+
+    <style>
+        * {
+        }
+
+        body {
+            font-family:Tahoma;
+        }
+
+        .hero {
+            position: absolute;
+            width:1140px;
+            top:20%;
+            left:48%;
+            transform: translate(-50%,-50%);
+            height: 100px;
+        }
+        .hero3
+        {
+            position: absolute;
+            width:1140px;
+            top:60%;
+            left:48%;
+            transform: translate(-50%,-50%);
+            height: 152px;
+        }
+        .btn {
+            border:1px solid #e67e22;
+            padding:10px 30px;
+            color:#e67e22;
+            text-decoration: none;
+            border-radius: 12px;
+            margin-right:20px;
+        }
+        .button-awesome {
+            margin-top:50px;
+        }
+        .btn-half {
+            background-color:#e67e22;
+        }
+        .btn-full:hover {
+            background-color:#e67e22;
+            color:white;
+            transition:all 0.5s ease-in;
+        }
+        .hero2 {
+            position: absolute;
+            width:140px;
+            top:50%;
+            left:50%;
+            transform: translate(-50%,-50%);
+        }
+
+        header {
+            background-image:linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('imagenes/3.jpg');
+            height:62vh;
+            background-position: center;
+            background-size:cover;
+        }
+
+        h1 {
+            color:white;
+        }
+
+        h2 {
+            color:white;
+        }
+
+        .row {
+            max-width:1140px;
+            margin:0 auto;
+        }
+
+        .main-nav {
+            list-style:none;
+            float:right;
+            margin-top:60px;
+        }
+            .main-nav > li {
+                display: inline-block;
+                margin-left:20px;
+            }
+                .main-nav > li > a {
+                    color: white;
+                    text-decoration: none;
+                    font-size:90%;
+                    font-weight: bold;
+                }
+
+                    .main-nav > li > a:hover {
+                        color:#e57e22;
+                        border-bottom:2px solid #e67e22;
+                        transition:all 0.5s ease-in;
+                        padding:15px 0;
+                    }
+        .rowpie {
+            max-width:1140px;
+            margin:0 auto;
+            height:auto;
+        }
+        .main-navpie {
+            list-style:none;
+            float:left;
+            margin-top:630px;
+        }
+            .main-navpie > li {
+                display: inline-block;
+                margin-left:360px;
+            }
+                .main-navpie > li > a {
+                    color: black;
+                    text-decoration: none;
+                    font-size:90%;
+                    font-weight: bold;
+                }
+
+                    .main-navpie > li > a:hover {
+                        color:#e57e22;
+                        border-bottom:2px solid #e67e22;
+                        transition:all 0.5s ease-in;
+                        padding:15px 0;
+                    }
+        .formulario {
+            background-image: linear-gradient(rgba( 0,0,0,0.9), rgba(0,0,0,0.9));
+            color: white;
+            text-decoration: overline;
+            width: 1150px;
+            height: 45px;
+        }
+        .hero2 {
+            position: absolute;
+            width:400px;
+            top:22%;
+            left:20%;
+            transform: translate(-50%,-50%);
+        }
+        .tabla {
+            position: absolute;
+            width:80%;
+            top:23%;
+            left:20%;
+            
+        }
+        .tabla  td 
+        {
+            width:33%;
+        }
+
+        .tabla1 {
+            position: absolute;
+            width:90%;
+            top:50%;
+            left:5%;
+            
+        }
+        .tabla1  td 
+        {
+            width:50%;
+        }
+       
+        .btn1 {
+            border:1px solid #e67e22;
+            padding:10px 30px;
+            color:white;
+            text-decoration: none;
+            border-radius: 12px;
+            margin-right:20px;
+        }
+        .button-awesome {
+            margin-top:50px;
+            text-align:center;
+        }
+        .button-awesome1 {
+            margin-top:50px;
+            text-align:center;
+        }
+        .button-awesome2 {
+            margin-top:40px;
+            text-align:center;
+        }
+
+        .btn1-half {
+            background-color:#2a2ee9;
+        }
+        .btn1-full:hover {
+            background-color:#2a2ee9;
+            color:white;
+            transition:all 0.5s ease-in;
+        }
+        .subtitulo {
+            color:white;
+            text-align:center;
+        }
+        .subtitulo1 {
+            color:black;
+            text-align:center;
+            text-decoration: inherit;
+        }
+        .split {
+         margin-top:100px;
+         height:40%;
+          width: 50%;
+          position: fixed;
+          z-index: 1;
+          top: 0;
+          overflow-x: hidden;
+          padding-top: 20px;
+        }
+
+        /* Control the left side */
+        .left {
+          left: 0;
+          
+        }
+
+        /* Control the right side */
+        .right {
+          right: 0;
+        }
+
+        /* If you want the content centered horizontally and vertically */
+        .centered {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          text-align: left;
+        }
+
+        /* Style the image inside the centered container, if needed */
+        .centered img {
+          width: 150px;
+          border-radius: 50%;
+        }
+
+
+    </style>
+    
+
+</head>
+<body>
+    <form id="form1" runat="server">
+
+    <header>
+        <div class="row">
+            <div class="row">
+            <ul class="main-nav">
+                <li><a href="Index.html">Inicio</a></li>
+                <li><a href="Comercios.html">Comercios</a></li>
+                <li><a href="Sucursales.html">Sucursales</a></li>
+                <li><a href="Conteos.html">Conteo de Quejas</a></li>
+                <li><a href="Iniciosesion.html">Cerrar Sesion</a></li>
+            </ul>
+        </div>
+
+     <div class="hero">
+        <h1> Detalle de Quejas<br /></h1>
+     </div>
+    <table class="tabla">
+        <tr>
+            <td>
+                <label class="subtitulo">Rango de Fechas</label>
+            </td>
+            <td>
+                <label class="subtitulo">Comercio</label>
+            </td>
+            <td>
+                <label class="subtitulo">Sucursal</label>
+            </td>
+        </tr>
+ 
+        <tr>
+            <td>
+              <div class="row">
+                    <div class="col-lg-8">
+                        <div class="input-group input-daterange" id="dataRange" name="dataRange">
+                            <input type="text" id="sltFechaInicio" name="sltFechaInicio" class="form-control input-sm" value="09-01-2020">
+                            <div class="input-group-addon">a</div>
+                            <input type="text" id="sltFechaFin" name="sltFechaFin" class="form-control input-sm" value="10-02-2020">
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <select name="sltComercioFiltro" id="sltComercioFiltro" class="input-sm combobox">
+                    <option value="0">Seleccione comercio</option>
+                </select>
+            </td>
+            <td>
+                <select name="sltSucursalFiltro" id="sltSucursalFiltro" class=" input-sm combobox">
+                    <option value="0">Seleccione sucursal</option>
+                </select>
+            </td>
+        </tr>
+         <tr>
+            <td>
+                <label class="subtitulo">Region</label>
+            </td>
+            <td>
+                <label class="subtitulo">Departamento</label>
+            </td>
+            <td>
+                <label class="subtitulo">Municipio</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <select name="sltRegionFiltro" id="sltRegionFiltro" class="input-sm combobox">
+                    <option value="0">Seleccione Region</option>
+                </select>
+            </td>
+            <td>
+                <select name="sltDepartamentoFiltro" id="sltDepartamentoFiltro" class="input-sm combobox">
+                    <option value="0">Seleccione Departamento</option>
+                </select>
+            </td>
+            <td>
+                <select name="sltMunicipioFiltro" id="sltMunicipioFiltro" class="input-sm combobox">
+                    <option value="0">Seleccione Municipio</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+                <div class="col-lg-4 text-left">
+                    <button type="button" class="btn btn-default" id="boton">Búsqueda
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    </table>
+     <div class="tabla1">
+        <div class="formulario">
+            <div class="col-lg-12">
+                <table class="table table-striped table-bordered table-hover" id="tbListados">
+                    <thead>
+                    <tr>
+                        <th width="15%">&nbsp;&nbsp;Descripción&nbsp;&nbsp;</th>
+                        <th width="10%">&nbsp;&nbsp;Comercio&nbsp;&nbsp;</th>
+                        <th width="15%">&nbsp;&nbsp;Sucursal&nbsp;&nbsp;</th>
+                        <th width="20%">&nbsp;&nbsp;Municipio&nbsp;&nbsp;</th>
+                        <th width="15%">&nbsp;&nbsp;Departamento&nbsp;&nbsp;</th>
+                        <th width="15%">&nbsp;&nbsp;Region&nbsp;&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody class="subtitulo1" id="tblListados">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+     </div>
+        </div>
+    </header>
+    </form>
+</body>
+</html>

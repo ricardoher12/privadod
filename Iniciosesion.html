@@ -1,0 +1,264 @@
+
+<!DOCTYPE html>
+<html>
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+
+    $("#boton").click(function() {
+        
+        $.ajax({
+               type: "POST",
+               url: "https://webapiprivado20201002172629.azurewebsites.net/login",
+               contentType:"application/json",
+               data: "{\"PassWord\": " + $('#logPassword').val() + ", \"UserName\": \" " + $("#logUsuario").val() + "\" }", // serializes the form's elements.
+               success: function(data)
+               {
+                    if(data)
+                    {
+                        
+                    }
+                    else
+                    {
+                        alert("Usuario o Contraseña Invalidos");
+                    }
+                     
+                   
+               }
+        });        
+    });           
+    });
+</script>
+    
+    </head>
+
+    <title>Inicio</title>
+ <style>
+        * {
+        }
+
+        body {
+            font-family:Tahoma;
+        }
+
+        .hero {
+            position: absolute;
+            width:1140px;
+            top:40%;
+            left:50%;
+            transform: translate(-50%,-50%);
+            height: 152px;
+        }
+        .hero3
+        {
+            position: absolute;
+            width:1140px;
+            top:60%;
+            left:50%;
+            transform: translate(-50%,-50%);
+            height: 152px;
+        }
+        .btn {
+            border:1px solid #e67e22;
+            padding:10px 30px;
+            color:#e67e22;
+            text-decoration: none;
+            border-radius: 12px;
+            margin-right:20px;
+        }
+        .button-awesome {
+            margin-top:50px;
+        }
+        .btn-half {
+            background-color:#e67e22;
+        }
+        .btn-full:hover {
+            background-color:#e67e22;
+            color:white;
+            transition:all 0.5s ease-in;
+        }
+        .hero2 {
+            position: absolute;
+            width:140px;
+            top:50%;
+            left:50%;
+            transform: translate(-50%,-50%);
+        }
+
+        header {
+            background-image:linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('imagenes/3.jpg');
+            height:100vh;
+            background-position: center;
+            background-size:cover;
+        }
+
+        h1 {
+            color:white;
+        }
+
+        .row {
+            max-width:1140px;
+            margin:0 auto;
+        }
+
+        .main-nav {
+            list-style:none;
+            float:right;
+            margin-top:60px;
+        }
+            .main-nav > li {
+                display: inline-block;
+                margin-left:20px;
+            }
+                .main-nav > li > a {
+                    color: white;
+                    text-decoration: none;
+                    font-size:90%;
+                    font-weight: bold;
+                }
+
+                    .main-nav > li > a:hover {
+                        color:#e57e22;
+                        border-bottom:2px solid #e67e22;
+                        transition:all 0.5s ease-in;
+                        padding:15px 0;
+                    }
+        .rowpie {
+            max-width:1140px;
+            margin:0 auto;
+            height:auto;
+        }
+        .main-navpie {
+            list-style:none;
+            float:left;
+            margin-top:630px;
+        }
+            .main-navpie > li {
+                display: inline-block;
+                margin-left:360px;
+            }
+                .main-navpie > li > a {
+                    color: black;
+                    text-decoration: none;
+                    font-size:90%;
+                    font-weight: bold;
+                }
+
+                    .main-navpie > li > a:hover {
+                        color:#e57e22;
+                        border-bottom:2px solid #e67e22;
+                        transition:all 0.5s ease-in;
+                        padding:15px 0;
+                    }
+        .formulario {
+            background-image: linear-gradient(rgba( 0,0,0,0.7), rgba(0,0,0,0.7));
+            color: white;
+            width: 500px;
+            height: 280px;
+        }
+        .hero2 {
+            position: absolute;
+            width:400px;
+            top:50%;
+            left:70%;
+            transform: translate(-50%,-50%);
+        }
+        .tabla {
+            position: absolute;
+            width:400px;
+            top:35%;
+            left:70%;
+            transform: translate(-50%,-50%);
+        }
+        .btn1 {
+            border:1px solid #e67e22;
+            padding:10px 30px;
+            color:white;
+            text-decoration: none;
+            border-radius: 12px;
+            margin-right:20px;
+        }
+        .button-awesome {
+            margin-top:50px;
+            text-align:center;
+        }
+        .button-awesome1 {
+            margin-top:50px;
+            text-align:center;
+        }
+        .button-awesome2 {
+            margin-top:40px;
+            text-align:center;
+        }
+        .btn1-half {
+            background-color:#2a2ee9;
+        }
+        .btn1-full:hover {
+            background-color:#2a2ee9;
+            color:white;
+            transition:all 0.5s ease-in;
+        }
+        .subtitulo {
+            color:white;
+            text-align:center;
+        }
+
+
+    </style>
+
+
+
+</head>
+<body >
+     <form id="form1" runat="server">
+
+    <header>
+        <div class="row">
+            <div class="row">
+            <ul class="main-nav">
+                <li><a href="Index.html">Inicio</a></li>
+            </ul>
+        </div>
+
+        <div class="hero">
+            <img src="imagenes/1.jpg">
+            <h1>Dirección de Atención  <br/></h1>
+            <h1>y Asistencia al consumidor<br/></h1>
+        </div>
+        <div class="hero2">
+            <div class="formulario">
+                <div class="subtitulo">
+                    <h3>Iniciar Sesion</h3>
+                </div>
+                    <tr>
+                      <th scope="col"><span class="button-awesome">
+                        <div>Usuario : </div>
+                      </th>
+                      <th scope="col">
+                        <div >
+                            <input type="text" name="logUsuario" id="logUsuario">
+                        </div>
+                      </th>
+                    </tr>
+                    <tr>
+                      <br><td><div ><span class="button-awesome">Password :
+                      </div></td>
+                      <td><div>
+                        <input type="password" name="logPassword" id="logPassword">
+                      </div></td>
+                    </tr>
+                        <td>
+                            <div class="button-awesome2">
+                                <a href="Listados.html" id="boton" class="btn1 btn1-full">Ingresar</a>
+                            </div>
+                        </td>
+                </div>
+            </div>
+        </div>
+        </div>
+    </header>
+    </form>
+</body>
+</html>
